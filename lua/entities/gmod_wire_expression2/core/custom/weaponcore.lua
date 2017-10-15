@@ -1,4 +1,4 @@
-E2Lib.RegisterExtension("weaponcore", false)
+E2Lib.RegisterExtension("CodingaleWeaponCore", false)
 
 local function ValidPly( ply )
 	if not ply or not ply:IsValid() or not ply:IsPlayer() then
@@ -124,25 +124,22 @@ e2function void entity:plySetClip2(ammo)
 end
 
 e2function entity entity:getWeapon(string class)
-	if not ValidPly(this) then return end
-	if not hasAccess(self.player) then return end
-
+	if not ValidPly(this) or not this:HasWeapon(class) then return NULL end
+	
 	return getWeaponByClass(this, class)
 end
 
 e2function array entity:getWeapons()
 	if not ValidPly(this) then return end
-	if not hasAccess(self.player) then return end
-
+	
 	return this:GetWeapons()
 end
 
 
 e2function number entity:hasWeapon(string weapon)
 	if not ValidPly(this) then return end
-	if not hasAccess(self.player) then return end
 
-	return this:HasWeapon(weapon)
+	return this:HasWeapon(weapon) and 1 or 0
 end
 
 ------------------------------------------------------------------------------
