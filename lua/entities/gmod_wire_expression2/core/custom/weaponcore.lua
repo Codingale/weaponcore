@@ -51,7 +51,7 @@ OKWeapons["gmod_tool"] = true
 
 function isWeapon(swepName) 
 	if OKWeapons[swepName] then return true end
-	return weapons.Get(swepName) != nil	
+	return weapons.Get(swepName) ~= nil	
 end
 
 e2function entity entity:plyGive(string class)
