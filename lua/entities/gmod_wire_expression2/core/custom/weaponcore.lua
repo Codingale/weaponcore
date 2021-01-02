@@ -1,25 +1,21 @@
 E2Lib.RegisterExtension("CodingaleWeaponCore", false)
 
 local function ValidPly( ply )
-	if not ply or not ply:IsValid() or not ply:IsPlayer() then
-		return false
-	end
-	return true
+    return IsValid(ply) and ply:IsPlayer()
 end
 
 local function hasAccess(ply) -- TODO: Rewrite permissions to a ULX/CPPI system.
-	if ply:IsAdmin() then
-		return true
-	end
-	return false
+    return ply:IsAdmin()
 end
 
 local function getWeaponByClass(ply, weap)
-	for k,v in pairs(ply:GetWeapons()) do
-		if v:GetClass() == weap then
-			return v
-		end
-	end
+
+    for k,v in pairs(ply:GetWeapons()) do
+        if v:GetClass() == weap then
+            return v
+        end
+    end
+
 end
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -50,126 +46,125 @@ OKWeapons["gmod_tool"] = true
 -- TODO: find a way to get base weapons / verify this is all of them. (least that don't get returned by weapons.Get)
 
 function isWeapon(swepName) 
-	if OKWeapons[swepName] then return true end
-	return weapons.Get(swepName) ~= nil	
+    if OKWeapons[swepName] then return true end
+    return weapons.Get(swepName) ~= nil	
 end
 
 e2function entity entity:plyGive(string class)
-	if not ValidPly(this) then return NULL end
-	if not hasAccess(self.player) then return NULL end
-	if not isWeapon(class) then return NULL end
-	return this:Give(class) or NULL
+    if not ValidPly(this) then return NULL end
+    if not hasAccess(self.player) then return NULL end
+    if not isWeapon(class) then return NULL end
+    
+return this:Give(class) or NULL
 end
 
 e2function void entity:plyGiveAmmo(string ammotype, number count)
-	if not ValidPly(this) then return end
-	if not hasAccess(self.player) then return end
+    if not ValidPly(this) then return end
+    if not hasAccess(self.player) then return end
 
-	this:GiveAmmo(count, ammotype, false)
+    this:GiveAmmo(count, ammotype, false)
 end
 
 e2function void entity:plySetAmmo(string ammotype, number count)
-	if not ValidPly(this) then return end
-	if not hasAccess(self.player) then return end
+    if not ValidPly(this) then return end
+    if not hasAccess(self.player) then return end
 
-	this:SetAmmo(count, ammotype)
+    this:SetAmmo(count, ammotype)
 end
 
 -----
 e2function void entity:plySelectWeapon(string weapon)
-	if not ValidPly(this) then return end
-	if not hasAccess(self.player) then return end
+    if not ValidPly(this) then return end
+    if not hasAccess(self.player) then return end
 
-	this:SelectWeapon(weapon)
+    this:SelectWeapon(weapon)
 end
 
 -----
 e2function void entity:plyDropWeapon(string weapon)
-	if not ValidPly(this) then return end
-	if not hasAccess(self.player) then return end
+    if not ValidPly(this) then return end
+    if not hasAccess(self.player) then return end
 	
-	this:DropNamedWeapon(weapon)
+    this:DropNamedWeapon(weapon)
 end
 
 e2function void entity:plyDropWeapon(entity weapon)
-	if not ValidPly(this) then return end
-	if not hasAccess(self.player) then return end
+    if not ValidPly(this) then return end
+    if not hasAccess(self.player) then return end
 	
-	this:DropWeapon(weapon)
+    this:DropWeapon(weapon)
 end
 
 -----------------------------------------------------------------
 e2function void entity:plyStripWeapon(string weapon)
-	if not ValidPly(this) then return end
-	if not hasAccess(self.player) then return end
+    if not ValidPly(this) then return end
+    if not hasAccess(self.player) then return end
 
-	this:StripWeapon(weapon)
+    this:StripWeapon(weapon)
 end
 
 e2function void entity:plyStripWeapon(entity weapon)
-	if not ValidPly(this) then return end
-	if not hasAccess(self.player) then return end
+    if not ValidPly(this) then return end
+    if not hasAccess(self.player) then return end
 
-	this:StripWeapon(weapon:GetClass())
+    this:StripWeapon(weapon:GetClass())
 end
 
 e2function void entity:plyStripWeapons()
-	if not ValidPly(this) then return end
-	if not hasAccess(self.player) then return end
+    if not ValidPly(this) then return end
+    if not hasAccess(self.player) then return end
 
-	this:StripWeapons()
+    this:StripWeapons()
 end
 
 e2function void entity:plyStripAmmo()
-	if not ValidPly(this) then return end
-	if not hasAccess(self.player) then return end
+    if not ValidPly(this) then return end
+    if not hasAccess(self.player) then return end
 
-	this:StripAmmo()
+    this:StripAmmo()
 end
 
 e2function void entity:plySetClip1(ammo)
-	if not ValidPly(this) then return end
-	if not hasAccess(self.player) then return end
-	if not (this:IsWeapon() or this:IsPlayer()) then return end
+    if not ValidPly(this) then return end
+    if not hasAccess(self.player) then return end
+    if not (this:IsWeapon() or this:IsPlayer()) then return end
 
-	local weap = this
-	if this:IsPlayer() then
-		weap = this:GetActiveWeapon()
-	end
+    local weap = this
+    if this:IsPlayer() then
+       weap = this:GetActiveWeapon()
+    end
 
-	weap:SetClip1(ammo)
+    weap:SetClip1(ammo)
 end
 
 e2function void entity:plySetClip2(ammo)
-	if not ValidPly(this) then return end
-	if not hasAccess(self.player) then return end
-	if not (this:IsWeapon() or this:IsPlayer()) then return end
+    if not ValidPly(this) then return end
+    if not hasAccess(self.player) then return end
+    if not (this:IsWeapon() or this:IsPlayer()) then return end
 
-	local weap = this
-	if this:IsPlayer() then
-		weap = this:GetActiveWeapon()
-	end
+    local weap = this
 
-	weap:SetClip2(ammo)
+    if this:IsPlayer() then
+        weap = this:GetActiveWeapon()
+    end
+
+    weap:SetClip2(ammo)
 end
 
 e2function entity entity:getWeapon(string class)
-	if not ValidPly(this) or not this:HasWeapon(class) then return NULL end
-	
-	return getWeaponByClass(this, class) or NULL
+    if not ValidPly(this) or not this:HasWeapon(class) then return NULL end
+    return getWeaponByClass(this, class) or NULL
 end
 
 e2function array entity:getWeapons()
-	if not ValidPly(this) then return end
-	
-	return this:GetWeapons()
+    if not ValidPly(this) then return {} end
+    return this:GetWeapons()
 end
 
 
 e2function number entity:hasWeapon(string weapon)
-	if not ValidPly(this) then return end
-
-	return this:HasWeapon(weapon) and 1 or 0
+    if not ValidPly(this) then return 0 end
+    return this:HasWeapon(weapon) and 1 or 0
 end
 
 ------------------------------------------------------------------------------
@@ -179,34 +174,34 @@ local weaponPly = nil
 local weaponOld = nil
 local weaponNext = nil
 local weaponswitchclk = 0
- 
-registerCallback("destruct",function(self)
-		registered_e2s_switch[self.entity] = nil
+
+registerCallback("destruct", function(self)
+    registered_e2s_switch[self.entity] = nil
 end)
 
-hook.Add("PlayerSwitchWeapon","Expresion2PlayerSwitchWeapon", function(ply, oldWeapon, newWeapon)
+hook.Add("PlayerSwitchWeapon", "Expresion2PlayerSwitchWeapon", function(ply, oldWeapon, newWeapon)
+    weaponPly = ply
+    weaponOld = oldWeapon
+    weaponNext = newWeapon
+    weaponswitchclk = 1
 
-	weaponPly = ply
-	weaponOld = oldWeapon
-	weaponNext = newWeapon
-	weaponswitchclk = 1
-	for ent,_ in pairs(registered_e2s_switch) do
-		ent:Execute()
-	end
-	weaponswitchclk = 0
-	
+    for ent, _ in pairs(registered_e2s_switch) do
+        ent:Execute()
+    end
+
+    weaponswitchclk = 0
 end)
- 
+
 e2function void runOnWeaponSwitch(activate)
-	if activate ~= 0 then
-		registered_e2s_switch[self.entity] = true
-	else
-		registered_e2s_switch[self.entity] = nil
-	end
+    if activate ~= 0 then
+        registered_e2s_switch[self.entity] = true
+    else
+        registered_e2s_switch[self.entity] = nil
+    end
 end
  
 e2function number weaponSwitchClk()
-	return weaponswitchclk
+   return weaponswitchclk
 end
 
 e2function entity lastWeaponSwitchPlayer()
@@ -214,11 +209,11 @@ e2function entity lastWeaponSwitchPlayer()
 end
 
 e2function entity lastWeaponSwitchOld()
-	return weaponOld or NULL
+    return weaponOld or NULL
 end
 
 e2function entity lastWeaponSwitchNext()
-	return weaponNext or NULL
+    return weaponNext or NULL
 end
 
 ------------------------------------------------------------------------------
@@ -227,21 +222,20 @@ local registered_e2s_equip = {}
 local weaponEquiped = NULL
 local weaponequipclk = 0
 
-registerCallback("destruct",function(self)
-		registered_e2s_equip[self.entity] = nil
+registerCallback("destruct", function(self)
+    registered_e2s_equip[self.entity] = nil
 end)
 
-hook.Add("WeaponEquip","Expresion2WeaponEquip", function(weapon)
-	timer.Simple(0, function()
-		weaponEquiped = weapon
-		weaponequipclk = 1
-		for ent,_ in pairs(registered_e2s_equip) do
-			
-			ent:Execute()
-			
-		end
-		weaponequipclk = 0
-	end)
+hook.Add("WeaponEquip", "Expresion2WeaponEquip", function(weapon)
+    timer.Simple(0, function() -- executes next tick
+        weaponEquiped = weapon
+        weaponequipclk = 1
+
+        for ent,_ in pairs(registered_e2s_equip) do
+            ent:Execute()	
+        end
+        weaponequipclk = 0
+    end)
 end)
 
 e2function void runOnWeaponEquip(activate)
